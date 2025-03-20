@@ -21,7 +21,13 @@ if st.button("Start Downloading Invoices"):
     if not email or not password or not orders_url or not download_dir:
         st.error("❌ Please fill all fields!")
     else:
-        st.info("🚀 Starting invoice download process...")
+        st.info("🚀 Setting up environment...")
+
+        # **Install Chrome and ChromeDriver in Streamlit Cloud**
+        os.system("apt-get update")
+        os.system("apt-get install -y google-chrome-stable")
+
+        st.info("✅ Chrome installed successfully!")
 
         # Set up headless Chrome options
         chrome_options = webdriver.ChromeOptions()
@@ -30,6 +36,9 @@ if st.button("Start Downloading Invoices"):
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-blink-features=AutomationControlled")
         chrome_options.add_argument("--window-size=1920x1080")
+
+        # **Specify the correct Chrome binary path**
+        chrome_options.binary_location = "/usr/bin/google-chrome"
 
         # Configure Chrome to download PDFs automatically
         prefs = {
@@ -42,6 +51,8 @@ if st.button("Start Downloading Invoices"):
         # Launch browser
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
+
+        st.success("✅ Chrome and WebDriver successfully initialized!")
 
         try:
             st.info("🔄 Navigating to Amazon Orders Page...")
