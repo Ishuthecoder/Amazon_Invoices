@@ -15,7 +15,8 @@ st.write("This app logs into Amazon, downloads invoice PDFs, and saves them to y
 email = st.text_input("📧 Enter your Amazon email:", type="default")
 password = st.text_input("🔑 Enter your Amazon password:", type="password")
 orders_url = st.text_input("🔗 Enter Amazon orders list URL:")
-download_dir = st.text_input("📁 Enter directory to save invoices:", value=r"/app/invoices")
+download_dir = "/tmp/invoices"
+os.makedirs(download_dir, exist_ok=True)
 
 if st.button("Start Downloading Invoices"):
     if not email or not password or not orders_url or not download_dir:
@@ -48,9 +49,9 @@ if st.button("Start Downloading Invoices"):
         }
         chrome_options.add_experimental_option("prefs", prefs)
 
-        # Launch browser
+        # Automatically install and use ChromeDriver
         service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=chrome_options)
+        driver = webdriver.Chrome(service=service, options=options)
 
         st.success("✅ Chrome and WebDriver successfully initialized!")
 
